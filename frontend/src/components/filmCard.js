@@ -1,52 +1,48 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import { Image } from "expo-image";
+import { router } from "expo-router";
 
 export default function FilmCard({ film }) {
-  const router = useRouter();
-
   return (
-    <Pressable 
-      style={styles.card} 
-      onPress={() => router.push(`/movie/${film.id}`)}
+    <Pressable
+      style={styles.card}
+      onPress={() =>
+        router.push({
+          pathname: "/film/[id]",
+          params: {
+            id: film.id,
+            title: film.title,
+            posterUrl: film.posterUrl,
+          },
+        })
+      }
     >
-      <Image 
-        source={{ uri: film.posterUrl }} 
-        style={styles.image}
+      <Image
+        source={{ uri: film.posterUrl }}
+        style={styles.poster}
         contentFit="cover"
-        transition={500} 
       />
-      <View style={styles.info}>
-        <Text style={styles.title} numberOfLines={1}>{film.title}</Text>
-        <Text style={styles.genre}>{film.genre}</Text>
-      </View>
+      <Text style={styles.title} numberOfLines={2}>
+        {film.title}
+      </Text>
     </Pressable>
   );
 }
 
+
 const styles = StyleSheet.create({
   card: {
-    width: '48%', // Fits 2 columns nicely
-    marginBottom: 20,
-    backgroundColor: '#1a1a1a',
-    borderRadius: 12,
-    overflow: 'hidden',
+    width: "48%",
+    marginBottom: 16,
   },
-  image: {
-    width: '100%',
+  poster: {
     height: 220,
-  },
-  info: {
-    padding: 10,
+    borderRadius: 10,
   },
   title: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  genre: {
-    color: '#888',
-    fontSize: 12,
-    marginTop: 4,
+    marginTop: 6,
+    color: "#fff",
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
