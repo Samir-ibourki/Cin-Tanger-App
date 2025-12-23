@@ -4,6 +4,10 @@ const port = 3000;
 const app = express();
 app.use(express.json());
 import "./models/index.js";
+import salleRoutes from "./routes/salleRoutes.js";
+import sessionRoute from "./routes/sessionRoutes.js";
+app.use("/api/salle", salleRoutes);
+app.use("/api/session", sessionRoute);
 
 sequelize
   .sync({ alter: true })

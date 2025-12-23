@@ -3,7 +3,7 @@ import {
   getByFilm,
   createSession,
   updateSeats,
-} from "../controllers/sessionControllers";
+} from "../controllers/sessionControllers.js";
 
 const router = express.Router();
 
