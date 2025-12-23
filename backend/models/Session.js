@@ -16,6 +16,27 @@ const Session = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+     
+     filmId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Films",
+        key: "id",
+      },
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    },
+        salleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Salles",
+        key: "id",
+      },
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    },
   },
   {
     timestamps: true,
