@@ -9,15 +9,14 @@ import reservationRoutes from "./routers/reservationRouters.js";
 
 import cors from "cors";
 
-
 app.use(cors());
 app.use(express.json());
 app.use("/film", filmRoutes);
-app.use("/reservation", reservationRoutes);
+app.use("/reservations", reservationRoutes);
 
 sequelize
   .sync({ force: true })
-  .then(() =>  console.log("Database synced successfully!"))
+  .then(() => console.log("Database synced successfully!"))
   .catch((err) => console.log("Error DB:", err));
 
 app.listen(port, () => {
