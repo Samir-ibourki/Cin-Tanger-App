@@ -5,12 +5,12 @@ import {
   StyleSheet,
   ActivityIndicator,
   Text,
-  SafeAreaView,
   StatusBar,
 } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { getFilms } from "../src/services/filmservice";
 import FilmCard from "../src/components/filmCard";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const { data, isLoading, error } = useQuery({

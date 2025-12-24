@@ -15,7 +15,7 @@ app.use("/film", filmRoutes);
 app.use("/reservations", reservationRoutes);
 
 sequelize
-  .sync({ force: true })
+  .sync({ alter: true })
   .then(() => console.log("Database synced successfully!"))
   .catch((err) => console.log("Error DB:", err));
 
