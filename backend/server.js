@@ -1,24 +1,40 @@
 import sequelize from "./config/database.js";
 import express from "express";
-const port = 3000;
+const PORT = 3000;
 const app = express();
 app.use(express.json());
 import "./models/index.js";
-import filmRoutes from "./routers/filmRouters.js";
-import reservationRoutes from "./routers/reservationRouters.js";
+import filmRoutes from "./routes/filmRouters.js";
+import reservationRoutes from "./routes/reservationRouters.js";
 
 import cors from "cors";
+import { seedAll } from "./seeders/seedAll.js";
 
 app.use(cors());
 app.use(express.json());
 app.use("/film", filmRoutes);
 app.use("/reservations", reservationRoutes);
 
-sequelize
-  .sync({ alter: true })
-  .then(() => console.log("Database synced successfully!"))
-  .catch((err) => console.log("Error DB:", err));
+const startServer = async () => {
+  try {
+    await sequelize.sync({ force: true });
+    await seedAll();
 
-app.listen(port, () => {
-  console.log(`server running on port ${port}`);
-});
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Server error:", error);
+  }
+};
+
+startServer();
+
+// sequelize
+//   .sync({ alter: true })
+//   .then(() => console.log("Database synced successfully!"))
+//   .catch((err) => console.log("Error DB:", err));
+
+// app.listen(port, () => {
+//   console.log(`server running on port ${port}`);
+// });
