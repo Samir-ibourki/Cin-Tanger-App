@@ -1,18 +1,65 @@
-version: "3.9"
+# version: "3.9"
+
+# services:
+#   db:
+#     image: postgres:16
+#     container_name: project_postgres
+#     restart: always
+#     env_file:
+#       - backend/.env
+#     ports:
+#       - "54321:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#       - ./docker/db:/docker-entrypoint-initdb.d
+
+
+# volumes:
+#   postgres_data:
+  
+version: "3.8"
 
 services:
-  db:
-    image: postgres:16
-    container_name: project_postgres
-    restart: always
-    env_file:
-      - backend/.env
+  postgres:
+    image: postgres:15
+    container_name: cineTanger_postgres
     ports:
-      - "54321:5432"
+      - "54321:5432"   # ⛔ exposed DB
+    environment:
+      POSTGRES_DB: cineTanger
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./docker/db:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - cinetanger_net
 
+  api:
+    build: ./backend
+    container_name: cinetanger_api
+    ports:
+      - "80:3000"     
+    depends_on:
+      - postgres
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+
+      DB_HOST: postgres   # internal Docker communication
+      DB_PORT: 54321
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: cinetanger_db
+
+      JWT_SECRET: votre_super_secret_jwt_cinema_2024
+      JWT_EXPIRE: 7d
+    networks:
+      - cinetanger_net
 
 volumes:
-  postgres_data:
+  pgdata:
+
+networks:
+  cinetanger_net:
+    driver: bridge
+
