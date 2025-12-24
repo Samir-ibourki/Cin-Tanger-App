@@ -18,14 +18,14 @@
 //       allowNull: false,
 //       defaultValue: "CONFIRMED",
 //     },
-//     //  session_id: {                    
+//     //  session_id: {
 //     //   type: DataTypes.INTEGER,
-//     //   allowNull: false,           
-//     //   references: {               
+//     //   allowNull: false,
+//     //   references: {
 //     //     model: Session,
 //     //     key: "id",
 //     //   },
-//     //   onDelete: "CASCADE",       
+//     //   onDelete: "CASCADE",
 //     // },
 //   },
 //   {
@@ -63,7 +63,7 @@ const Reservation = sequelize.define(
       defaultValue: "CONFIRMED",
     },
 
-    // 🔑 Foreign Key
+    //  Foreign Key
     sessionId: {
       type: DataTypes.INTEGER,
       allowNull: false,

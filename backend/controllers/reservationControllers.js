@@ -72,21 +72,19 @@ import QRCode from "qrcode";
 import Reservation from "../models/Reservation.js";
 import Session from "../models/Session.js";
 
-/**
- * Générer code de confirmation
- */
+//Générer code de confirmation
+
 export const generateConfirmationCode = () => {
   return `RES-${crypto.randomBytes(4).toString("hex").toUpperCase()}`;
 };
 
-/**
- * CREATE RESERVATION + QR CODE
- */
+// CREATE RESERVATION + QR CODE
+
 export const createReservation = async (req, res) => {
   try {
     const { sessionId, seatsCount } = req.body;
 
-    // 1️⃣ Validation
+    //  Validation
     if (!sessionId || !seatsCount) {
       return res.status(400).json({
         success: false,
@@ -94,7 +92,7 @@ export const createReservation = async (req, res) => {
       });
     }
 
-    // 2️⃣ Check session
+    //  Check session
     const session = await Session.findByPk(sessionId);
     if (!session) {
       return res.status(404).json({
@@ -103,7 +101,7 @@ export const createReservation = async (req, res) => {
       });
     }
 
-    // 3️⃣ Check seats
+    //  Check seats
     if (session.availableSeats < seatsCount) {
       return res.status(400).json({
         success: false,
@@ -111,11 +109,11 @@ export const createReservation = async (req, res) => {
       });
     }
 
-    // 4️⃣ Générer code + QR
+    //  Générer code + QR
     const confirmationCode = generateConfirmationCode();
     const qrCode = await QRCode.toDataURL(confirmationCode);
 
-    // 5️⃣ Create reservation
+    //  Create reservation
     const reservation = await Reservation.create({
       confirmationCode,
       seatsCount,
@@ -123,11 +121,11 @@ export const createReservation = async (req, res) => {
       sessionId,
     });
 
-    // 6️⃣ Update seats
+    //  Update seats
     session.availableSeats -= seatsCount;
     await session.save();
 
-    // 7️⃣ Response (Ticket)
+    //  Response (Ticket)
     return res.status(201).json({
       success: true,
       message: "Booking created successfully",
@@ -145,9 +143,8 @@ export const createReservation = async (req, res) => {
   }
 };
 
-/**
- * GET ALL RESERVATIONS (Test Postman)
- */
+// GET ALL RESERVATIONS (Test Postman)
+
 export const getAllReservations = async (req, res) => {
   try {
     const reservations = await Reservation.findAll();
@@ -161,9 +158,8 @@ export const getAllReservations = async (req, res) => {
   }
 };
 
-/**
- * GET RESERVATION BY ID
- */
+//GET RESERVATION BY ID
+
 export const getReservationById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -185,9 +181,8 @@ export const getReservationById = async (req, res) => {
   }
 };
 
-/**
- * CANCEL RESERVATION
- */
+//CANCEL RESERVATION
+
 export const cancelReservation = async (req, res) => {
   try {
     const { id } = req.params;
