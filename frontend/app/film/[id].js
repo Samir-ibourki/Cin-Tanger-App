@@ -1,37 +1,44 @@
-import { Text, StyleSheet, ScrollView ,TouchableOpacity } from "react-native";
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { Image } from "expo-image";
-import { useLocalSearchParams  , useRouter } from "expo-router";
-
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function FilmDetailsScreen() {
-  const { id, title, posterUrl } = useLocalSearchParams();
   const router = useRouter();
+  const { id, title, posterUrl } = useLocalSearchParams();
+
+
+  const synopsis =
+    "this is a placeholder synopsis from backend";
+
+  const handleReserve = () => {
+    
+    router.push({
+      pathname: `/reservation/${id}`,
+      params: { title },
+    });
+
+    
+  };
+
   return (
     <ScrollView style={styles.container}>
-      <Image
-        source={{ uri: posterUrl }}
-        style={styles.poster}
-        contentFit="cover"
-      />
-
+      <Image source={{ uri: posterUrl }} style={styles.poster} contentFit="cover" />
       <Text style={styles.title}>{title}</Text>
 
       <Text style={styles.section}>Synopsis</Text>
-      <TouchableOpacity
-  style={styles.reserveButton}
-  onPress={() =>
-    router.push({
-      pathname: "/reservation/session",
-      params: { id, title, posterUrl },
-    })
-  }
->
-  <Text style={styles.reserveText}>Reserve Ticket</Text>
-</TouchableOpacity>
+      <Text style={styles.text}>{synopsis}</Text>
 
-      <Text style={styles.text}>
-        backend mazal 
-      </Text>
+      <TouchableOpacity style={styles.button} onPress={handleReserve}>
+        <Text style={styles.buttonText}>Reserve Ticket</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -39,42 +46,43 @@ export default function FilmDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0b0b0b",
+    backgroundColor: "#141414",
   },
   poster: {
-    height: 420,
     width: "100%",
+    height: 400,
   },
   title: {
-    color: "#fff",
-    fontSize: 24,
+    color: "#E50914",
+    fontSize: 26,
     fontWeight: "bold",
     margin: 16,
+    textAlign: "center",
   },
   section: {
     color: "#aaa",
     fontSize: 16,
     marginHorizontal: 16,
-    marginTop: 8,
+    marginTop: 16,
+    fontWeight: "600",
   },
   text: {
     color: "#ddd",
     fontSize: 14,
-    margin: 16,
+    marginHorizontal: 16,
+    marginTop: 8,
     lineHeight: 22,
   },
-  reserveButton: {
-  backgroundColor: "#e50914",
-  margin: 16,
-  paddingVertical: 14,
-  borderRadius: 10,
-  alignItems: "center",
-},
-
-reserveText: {
-  color: "#fff",
-  fontSize: 16,
-  fontWeight: "bold",
-},
-
+  button: {
+    margin: 24,
+    paddingVertical: 14,
+    backgroundColor: "#E50914",
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
+  },
 });

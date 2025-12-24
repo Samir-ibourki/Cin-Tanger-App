@@ -10,15 +10,17 @@ export default function ConfirmationScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>🎉 Réservation confirmée</Text>
+      <View style={styles.card}>
+        <Text style={styles.title}>Reservation Confirmed</Text>
 
-      <Text style={styles.text}>Nombre de places : {seats}</Text>
+        <Text style={styles.text}>Seats: {seats}</Text>
 
-      <Text style={styles.code}>{code}</Text>
+        <Text style={styles.code}>{code}</Text>
 
-      <Text style={styles.hint}>
-        Présentez ce code au guichet pour récupérer vos billets.
-      </Text>
+        <Text style={styles.hint}>
+          Show this code at the cinema entrance.
+        </Text>
+      </View>
     </View>
   );
 }
@@ -26,27 +28,34 @@ export default function ConfirmationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0b0b0b",
+    backgroundColor: "#141414",
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
+    padding: 24,
+  },
+  card: {
+    backgroundColor: "#1f1f1f",
+    padding: 24,
+    borderRadius: 14,
+    width: "100%",
+    alignItems: "center",
   },
   title: {
-    color: "#fff",
+    color: "#E50914",
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 16,
   },
   text: {
-    color: "#ddd",
+    color: "#fff",
     fontSize: 16,
-    marginBottom: 12,
   },
   code: {
-    color: "#e50914",
-    fontSize: 32,
+    color: "#E50914",
+    fontSize: 34,
     fontWeight: "bold",
     marginVertical: 20,
+    letterSpacing: 2,
   },
   hint: {
     color: "#aaa",
