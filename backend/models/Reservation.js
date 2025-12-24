@@ -63,7 +63,6 @@ const Reservation = sequelize.define(
       defaultValue: "CONFIRMED",
     },
 
-    // 🔑 Foreign Key
     sessionId: {
       type: DataTypes.INTEGER,
       allowNull: false,

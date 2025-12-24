@@ -12,32 +12,32 @@ async function seedReservation() {
         confirmationCode: "A001",
         seatsCount: 100,
         status: "CONFIRMED",
-        sessionId: 10,  
+        sessionId: 1,  
       },
       {
         confirmationCode: "A002",
         seatsCount: 100,
         status: "CONFIRMED",
-         sessionId: 11,  
+         sessionId: 2,  
       },
       {
         confirmationCode: "A003",
         seatsCount: 100,
         status: "CONFIRMED",
-         sessionId: 12, 
+         sessionId: 4, 
       },
         {
         confirmationCode: "A004",
         seatsCount: 100,
         status: "CONFIRMED",
-         sessionId: 13, 
+         sessionId: 5, 
       },
 
          {
         confirmationCode: "A005",
         seatsCount: 100,
         status: "CONFIRMED",
-         sessionId: 14, 
+         sessionId: 9, 
       },
     ];
 
