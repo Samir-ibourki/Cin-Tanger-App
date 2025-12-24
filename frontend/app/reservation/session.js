@@ -1,21 +1,28 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-
-const mockSessions = [
-  { id: 1, time: "14:00", room: "Salle 1" },
-  { id: 2, time: "17:30", room: "Salle 2" },
-  { id: 3, time: "20:00", room: "Salle 3" },
-];
-
+import { useQuery } from "@tanstack/react-query";
+import api from "../../api/axios";
 export default function SelectSessionScreen() {
   const { filmId, title } = useLocalSearchParams();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["sessions", filmId],
+    queryFn: async () => {
+      const res = await api.get(`/sessions/film/${filmId}`);
+      return res.data.data;
+    },
+  });
+
+  if (isLoading) {
+    return <Text style={{ color: "#fff" }}>Loading sessions...</Text>;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Select Session</Text>
       <Text style={styles.movie}>{title}</Text>
 
-      {mockSessions.map((session) => (
+      {data.map((session) => (
         <Pressable
           key={session.id}
           style={styles.card}
@@ -30,8 +37,10 @@ export default function SelectSessionScreen() {
             })
           }
         >
-          <Text style={styles.time}>{session.time}</Text>
-          <Text style={styles.room}>{session.room}</Text>
+          <Text style={styles.time}>
+            {session.date} - {session.time}
+          </Text>
+          <Text style={styles.room}>Salle {session.salleId}</Text>
         </Pressable>
       ))}
     </View>

@@ -13,10 +13,9 @@
 #       - postgres_data:/var/lib/postgresql/data
 #       - ./docker/db:/docker-entrypoint-initdb.d
 
-
 # volumes:
 #   postgres_data:
-  
+
 version: "3.8"
 
 services:
@@ -24,7 +23,7 @@ services:
     image: postgres:15
     container_name: cineTanger_postgres
     ports:
-      - "54321:5432"   # ⛔ exposed DB
+      - "54321:5432" # ⛔ exposed DB
     environment:
       POSTGRES_DB: cineTanger
       POSTGRES_USER: postgres
@@ -38,14 +37,14 @@ services:
     build: ./backend
     container_name: cinetanger_api
     ports:
-      - "80:3000"     
+      - "80:3000"
     depends_on:
       - postgres
     environment:
       NODE_ENV: development
       PORT: 3000
 
-      DB_HOST: postgres   # internal Docker communication
+      DB_HOST: postgres # internal Docker communication
       DB_PORT: 54321
       DB_USER: postgres
       DB_PASSWORD: postgres
@@ -62,4 +61,3 @@ volumes:
 networks:
   cinetanger_net:
     driver: bridge
-

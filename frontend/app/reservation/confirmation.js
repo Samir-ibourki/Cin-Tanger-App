@@ -1,24 +1,32 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-
-const generateCode = () =>
-  "CT-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import QRCode from "react-native-qrcode-svg";
 
 export default function ConfirmationScreen() {
-  const { seats } = useLocalSearchParams();
-  const code = generateCode();
+  const [ticket, setTicket] = useState(null);
+
+  useEffect(() => {
+    AsyncStorage.getItem("ticket").then((data) => {
+      if (data) setTicket(JSON.parse(data));
+    });
+  }, []);
+
+  if (!ticket) {
+    return <Text style={{ color: "#fff" }}>Loading ticket...</Text>;
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.title}>Reservation Confirmed</Text>
 
-        <Text style={styles.text}>Seats: {seats}</Text>
+        <QRCode value={ticket.confirmationCode} size={180} />
 
-        <Text style={styles.code}>{code}</Text>
+        <Text style={styles.code}>{ticket.confirmationCode}</Text>
 
         <Text style={styles.hint}>
-          Show this code at the cinema entrance.
+          Show this QR code at the cinema entrance.
         </Text>
       </View>
     </View>

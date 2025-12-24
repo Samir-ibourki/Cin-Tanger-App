@@ -1,10 +1,27 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
+import { useCreateReservation } from "../../hooks/useCreateReservation";
 
 export default function SelectSeatsScreen() {
-  const { filmId, sessionId, time } = useLocalSearchParams();
+  const { sessionId, time } = useLocalSearchParams();
   const [count, setCount] = useState(1);
+
+  const { mutate, isLoading } = useCreateReservation();
+
+  const handleConfirm = () => {
+    mutate(
+      {
+        sessionId,
+        seatsCount: count,
+      },
+      {
+        onSuccess: () => {
+          router.push("/reservation/confirmation");
+        },
+      }
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -21,28 +38,15 @@ export default function SelectSeatsScreen() {
 
         <Text style={styles.count}>{count}</Text>
 
-        <Pressable
-          style={styles.circle}
-          onPress={() => setCount(count + 1)}
-        >
+        <Pressable style={styles.circle} onPress={() => setCount(count + 1)}>
           <Text style={styles.symbol}>+</Text>
         </Pressable>
       </View>
 
-      <Pressable
-        style={styles.confirm}
-        onPress={() =>
-          router.push({
-            pathname: "/reservation/confirmation",
-            params: {
-              filmId,
-              sessionId,
-              seats: count,
-            },
-          })
-        }
-      >
-        <Text style={styles.confirmText}>Confirm Reservation</Text>
+      <Pressable style={styles.confirm} onPress={handleConfirm}>
+        <Text style={styles.confirmText}>
+          {isLoading ? "Booking..." : "Confirm Reservation"}
+        </Text>
       </Pressable>
     </View>
   );

@@ -29,12 +29,3 @@ const startServer = async () => {
 };
 
 startServer();
-
-// sequelize
-//   .sync({ alter: true })
-//   .then(() => console.log("Database synced successfully!"))
-//   .catch((err) => console.log("Error DB:", err));
-
-// app.listen(port, () => {
-//   console.log(`server running on port ${port}`);
-// });
