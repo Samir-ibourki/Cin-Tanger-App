@@ -82,7 +82,11 @@ export const generateConfirmationCode = () => {
 
 export const createReservation = async (req, res) => {
   try {
+<<<<<<< HEAD
+    const { confirmationCode, seatsCount,status,sessionId } = req.body;
+=======
     const { sessionId, seatsCount } = req.body;
+>>>>>>> 33d5c7490f6fc5c89e70d3a1dd10d8eb268ce924
 
     //  Validation
     if (!sessionId || !seatsCount) {
@@ -115,10 +119,14 @@ export const createReservation = async (req, res) => {
 
     //  Create reservation
     const reservation = await Reservation.create({
+<<<<<<< HEAD
+      confirmationCode, seatsCount,status,sessionId
+=======
       confirmationCode,
       seatsCount,
       status: "CONFIRMED",
       sessionId,
+>>>>>>> 33d5c7490f6fc5c89e70d3a1dd10d8eb268ce924
     });
 
     //  Update seats
@@ -183,10 +191,32 @@ export const getReservationById = async (req, res) => {
 
 //CANCEL RESERVATION
 
-export const cancelReservation = async (req, res) => {
-  try {
-    const { id } = req.params;
+<<<<<<< HEAD
+//..not work
 
+
+export const CancelReservation = async (req, res) => {
+=======
+export const cancelReservation = async (req, res) => {
+>>>>>>> 33d5c7490f6fc5c89e70d3a1dd10d8eb268ce924
+  try {
+    // const { id } = req.params;
+    console.log("Trying to delete reservation with id:", id);
+console.log("Trying to delete reservation with id:", req.params.id);
+const reservation = await Reservation.findByPk(req.params.id);
+console.log("Found reservation:", reservation);
+    // const reservation = await Reservation.findByPk(id);
+    console.log("Found reservation:", reservation);
+
+<<<<<<< HEAD
+    if (!reservation) return res.status(404).json({ message: "Reservation not found" });
+
+    await reservation.destroy();
+    res.json({ message: "Reservation canceled successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+=======
     const reservation = await Reservation.findByPk(id);
     if (!reservation) {
       return res.status(404).json({
@@ -204,5 +234,6 @@ export const cancelReservation = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
+>>>>>>> 33d5c7490f6fc5c89e70d3a1dd10d8eb268ce924
   }
 };
