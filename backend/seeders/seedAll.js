@@ -17,36 +17,40 @@ export const seedAll = async () => {
     // Films
     const films = await Film.bulkCreate([
       {
-        title: "Dune Part Two",
+        title: "The Maze Runner",
         synopsis: "Epic sci-fi sequel",
         duration: 165,
-        posterUrl: "https://image.tmdb.org/dune.jpg",
+        posterUrl:
+          "https://i.pinimg.com/736x/c4/eb/ba/c4ebba51f9884760922dcfd095bada40.jpg",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        title: "Oppenheimer",
+        title: "HARRY POTTER",
         synopsis: "Story of atomic bomb",
         duration: 180,
-        posterUrl: "https://image.tmdb.org/oppenheimer.jpg",
+        posterUrl:
+          "https://i.pinimg.com/736x/2b/14/da/2b14da6668dcc8e6456ab0ce9bcf1a5d.jpg",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        title: "Interstellar",
+        title: "Uncharted",
         synopsis:
           "Un groupe d'explorateurs voyage à travers un trou de ver pour sauver l'humanité.",
         duration: 169,
-        posterUrl: "https://example.com/interstellar.jpg",
+        posterUrl:
+          "https://i.pinimg.com/736x/cf/c1/09/cfc109de26321ca02ca4e5316b83c4f3.jpg",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        title: "The Matrix",
+        title: "The FIGHTER",
         synopsis:
           "Un hacker découvre que le monde dans lequel il vit est une simulation.",
         duration: 136,
-        posterUrl: "https://example.com/matrix.jpg",
+        posterUrl:
+          "https://i.pinimg.com/736x/63/0a/1f/630a1f7d5f86f848b3f431cf2e2643c9.jpg",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
