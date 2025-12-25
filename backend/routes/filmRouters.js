@@ -10,10 +10,10 @@ import {
 
 const router = express.Router();
 
-router.post("/", createFilm);        // Create
-router.get("/", getFilms);           // Read all
-router.get("/:id", getFilmById);     // Read one
-router.put("/:id", updatefilm);      // Update
-router.delete("/:id", deletefilm);   // Delete
+router.post("/", createFilm);        
+router.get("/", getFilms);           
+router.get("/:id", getFilmById);     
+router.put("/:id", updatefilm);      
+router.delete("/:id", deletefilm);   
 
 export default router;

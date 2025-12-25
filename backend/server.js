@@ -4,6 +4,7 @@ const PORT = 3000;
 const app = express();
 app.use(express.json());
 import "./models/index.js";
+
 import filmRoutes from "./routes/filmRouters.js";
 import reservationRoutes from "./routes/reservationRouters.js";
 import salleRoutes from "./routes/salleRoutes.js";
@@ -19,7 +20,7 @@ app.use("/salle", salleRoutes);
 app.use("/session", sessionRoutes);
 const startServer = async () => {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ alter: true });
     await seedAll();
 
     app.listen(PORT, () => {
@@ -28,6 +29,6 @@ const startServer = async () => {
   } catch (error) {
     console.error("Server error:", error);
   }
-};
+;}
 
 startServer();

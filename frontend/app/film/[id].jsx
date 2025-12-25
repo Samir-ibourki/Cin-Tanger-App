@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
@@ -14,23 +7,22 @@ export default function FilmDetailsScreen() {
   const router = useRouter();
   const { id, title, posterUrl } = useLocalSearchParams();
 
-
-  const synopsis =
-    "this is a placeholder synopsis from backend";
+  const synopsis = "this is a placeholder synopsis from backend";
 
   const handleReserve = () => {
-    
     router.push({
       pathname: `/reservation/${id}`,
       params: { title },
     });
-
-    
   };
 
   return (
     <ScrollView style={styles.container}>
-      <Image source={{ uri: posterUrl }} style={styles.poster} contentFit="cover" />
+      <Image
+        source={{ uri: posterUrl }}
+        style={styles.poster}
+        contentFit="cover"
+      />
       <Text style={styles.title}>{title}</Text>
 
       <Text style={styles.section}>Synopsis</Text>

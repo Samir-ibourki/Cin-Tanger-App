@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   FlatList,
@@ -6,10 +5,12 @@ import {
   ActivityIndicator,
   Text,
   StatusBar,
+  Pressable,
 } from "react-native";
 import FilmCard from "../src/components/filmCard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFilms } from "../hooks/useFilms";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   const { data, isLoading, error } = useFilms();
@@ -37,6 +38,14 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
+
+      <Pressable
+        style={styles.navButton}
+        onPress={() => router.push("/reservation/session")}
+      >
+        <Text style={styles.navButtonText}>Go to Reservation</Text>
+      </Pressable>
+
       <Text style={styles.header}>Now Showing</Text>
       <FlatList
         data={data}
@@ -44,7 +53,21 @@ export default function HomeScreen() {
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}
         contentContainerStyle={{ paddingBottom: 16 }}
-        renderItem={({ item }) => <FilmCard film={item} />}
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: `/films/${item.id}`,
+                params: {
+                  title: item.title,
+                  posterUrl: item.posterUrl,
+                },
+              })
+            }
+          >
+            <FilmCard film={item} />
+          </Pressable>
+        )}
       />
     </SafeAreaView>
   );
@@ -53,11 +76,11 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#141414", // Netflix-style dark background
+    backgroundColor: "#141414",
     paddingHorizontal: 16,
   },
   header: {
-    color: "#E50914", // Netflix red
+    color: "#E50914",
     fontSize: 28,
     fontWeight: "bold",
     marginVertical: 16,
@@ -78,5 +101,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     paddingHorizontal: 20,
+  },
+  navButton: {
+    backgroundColor: "#E50914",
+    padding: 12,
+    borderRadius: 10,
+    alignItems: "center",
+    marginVertical: 12,
+  },
+  navButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
