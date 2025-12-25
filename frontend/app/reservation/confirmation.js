@@ -1,24 +1,34 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-
-const generateCode = () =>
-  "CT-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import QRCode from "react-native-qrcode-svg";
 
 export default function ConfirmationScreen() {
-  const { seats } = useLocalSearchParams();
-  const code = generateCode();
+  const [ticket, setTicket] = useState(null);
+
+  useEffect(() => {
+    AsyncStorage.getItem("ticket").then((data) => {
+      if (data) setTicket(JSON.parse(data));
+    });
+  }, []);
+
+  if (!ticket) {
+    return <Text style={{ color: "#fff" }}>Loading ticket...</Text>;
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>🎉 Réservation confirmée</Text>
+      <View style={styles.card}>
+        <Text style={styles.title}>Reservation Confirmed</Text>
 
-      <Text style={styles.text}>Nombre de places : {seats}</Text>
+        <QRCode value={ticket.confirmationCode} size={180} />
 
-      <Text style={styles.code}>{code}</Text>
+        <Text style={styles.code}>{ticket.confirmationCode}</Text>
 
-      <Text style={styles.hint}>
-        Présentez ce code au guichet pour récupérer vos billets.
-      </Text>
+        <Text style={styles.hint}>
+          Show this QR code at the cinema entrance.
+        </Text>
+      </View>
     </View>
   );
 }
@@ -26,27 +36,34 @@ export default function ConfirmationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0b0b0b",
+    backgroundColor: "#141414",
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
+    padding: 24,
+  },
+  card: {
+    backgroundColor: "#1f1f1f",
+    padding: 24,
+    borderRadius: 14,
+    width: "100%",
+    alignItems: "center",
   },
   title: {
-    color: "#fff",
+    color: "#E50914",
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 16,
   },
   text: {
-    color: "#ddd",
+    color: "#fff",
     fontSize: 16,
-    marginBottom: 12,
   },
   code: {
-    color: "#e50914",
-    fontSize: 32,
+    color: "#E50914",
+    fontSize: 34,
     fontWeight: "bold",
     marginVertical: 20,
+    letterSpacing: 2,
   },
   hint: {
     color: "#aaa",

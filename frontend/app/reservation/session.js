@@ -1,23 +1,31 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-
-const mockSessions = [
-  { id: 1, time: "14:00", room: "Salle 1" },
-  { id: 2, time: "17:30", room: "Salle 2" },
-  { id: 3, time: "20:00", room: "Salle 3" },
-];
-
+import { useQuery } from "@tanstack/react-query";
+import api from "../../api/axios";
 export default function SelectSessionScreen() {
   const { filmId, title } = useLocalSearchParams();
 
+  const { data, isLoading } = useQuery({
+    queryKey: ["sessions", filmId],
+    queryFn: async () => {
+      const res = await api.get(`/sessions/film/${filmId}`);
+      return res.data.data;
+    },
+  });
+
+  if (isLoading) {
+    return <Text style={{ color: "#fff" }}>Loading sessions...</Text>;
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Séances – {title}</Text>
+      <Text style={styles.title}>Select Session</Text>
+      <Text style={styles.movie}>{title}</Text>
 
-      {mockSessions.map((session) => (
+      {data.map((session) => (
         <Pressable
           key={session.id}
-          style={styles.session}
+          style={styles.card}
           onPress={() =>
             router.push({
               pathname: "/reservation/seats",
@@ -29,9 +37,10 @@ export default function SelectSessionScreen() {
             })
           }
         >
-          <Text style={styles.text}>
-            {session.time} • {session.room}
+          <Text style={styles.time}>
+            {session.date} - {session.time}
           </Text>
+          <Text style={styles.room}>Salle {session.salleId}</Text>
         </Pressable>
       ))}
     </View>
@@ -41,23 +50,33 @@ export default function SelectSessionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0b0b0b",
+    backgroundColor: "#141414",
     padding: 16,
   },
   title: {
     color: "#fff",
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 16,
   },
-  session: {
-    backgroundColor: "#1c1c1c",
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 12,
+  movie: {
+    color: "#aaa",
+    marginBottom: 24,
   },
-  text: {
+  card: {
+    backgroundColor: "#1f1f1f",
+    padding: 18,
+    borderRadius: 12,
+    marginBottom: 14,
+    borderLeftWidth: 4,
+    borderLeftColor: "#E50914",
+  },
+  time: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  room: {
+    color: "#aaa",
+    marginTop: 4,
   },
 });
