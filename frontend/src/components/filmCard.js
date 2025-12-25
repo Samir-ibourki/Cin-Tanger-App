@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { Text, StyleSheet, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 
@@ -28,7 +28,6 @@ export default function FilmCard({ film }) {
     </Pressable>
   );
 }
-
 
 const styles = StyleSheet.create({
   card: {

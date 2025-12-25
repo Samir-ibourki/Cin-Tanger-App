@@ -1,78 +1,9 @@
-// import crypto from "crypto";
-// import Reservation from "../models/Reservation.js";
-
-// export const generateConfirmationCode = () => {
-//   return crypto.randomBytes(4).toString("hex").toUpperCase();
-// };
-
-// export const createResevation = async (req, res) => {
-//   try {
-//     const { confirmationCode, seatsCount, status } = req.body;
-
-//     const reservation = await Reservation.create({
-//       confirmationCode,
-//       seatsCount,
-//       status,
-//     });
-
-//     res.status(201).json({
-//       message: "booking created successfully",
-//       reservation,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-// // validation Test en Postman
-// export const getAllRservation = async (req, res) => {
-//   try {
-//     const reservations = await Reservation.findAll();
-//     res.json(reservations);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-// // validation Test en Postaman
-// export const getRservationyId = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const reservation = await Reservation.findByPk(id);
-
-//     if (!reservation) {
-//       return res.status(404).json({ message: "Booking not found" });
-//     }
-
-//     res.json(reservation);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-// //..
-
-// export const CancelReservation = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const booking = await Reservation.findByPk(id);
-//     if (!booking) return res.status(404).json({ message: "booking not found" });
-
-//     await booking.destroy();
-
-//     res.json({ message: "booking deleted successfully" });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 import crypto from "crypto";
 import QRCode from "qrcode";
 import Reservation from "../models/Reservation.js";
 import Session from "../models/Session.js";
 
-//Générer code de confirmation
+//gnerer code de confirmation
 
 export const generateConfirmationCode = () => {
   return `RES-${crypto.randomBytes(4).toString("hex").toUpperCase()}`;
@@ -82,11 +13,7 @@ export const generateConfirmationCode = () => {
 
 export const createReservation = async (req, res) => {
   try {
-<<<<<<< HEAD
-    const { confirmationCode, seatsCount,status,sessionId } = req.body;
-=======
     const { sessionId, seatsCount } = req.body;
->>>>>>> 33d5c7490f6fc5c89e70d3a1dd10d8eb268ce924
 
     //  Validation
     if (!sessionId || !seatsCount) {
@@ -119,14 +46,10 @@ export const createReservation = async (req, res) => {
 
     //  Create reservation
     const reservation = await Reservation.create({
-<<<<<<< HEAD
-      confirmationCode, seatsCount,status,sessionId
-=======
       confirmationCode,
       seatsCount,
       status: "CONFIRMED",
       sessionId,
->>>>>>> 33d5c7490f6fc5c89e70d3a1dd10d8eb268ce924
     });
 
     //  Update seats
@@ -191,32 +114,10 @@ export const getReservationById = async (req, res) => {
 
 //CANCEL RESERVATION
 
-<<<<<<< HEAD
-//..not work
-
-
-export const CancelReservation = async (req, res) => {
-=======
 export const cancelReservation = async (req, res) => {
->>>>>>> 33d5c7490f6fc5c89e70d3a1dd10d8eb268ce924
   try {
-    // const { id } = req.params;
-    console.log("Trying to delete reservation with id:", id);
-console.log("Trying to delete reservation with id:", req.params.id);
-const reservation = await Reservation.findByPk(req.params.id);
-console.log("Found reservation:", reservation);
-    // const reservation = await Reservation.findByPk(id);
-    console.log("Found reservation:", reservation);
+    const { id } = req.params;
 
-<<<<<<< HEAD
-    if (!reservation) return res.status(404).json({ message: "Reservation not found" });
-
-    await reservation.destroy();
-    res.json({ message: "Reservation canceled successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: error.message });
-=======
     const reservation = await Reservation.findByPk(id);
     if (!reservation) {
       return res.status(404).json({
@@ -234,6 +135,5 @@ console.log("Found reservation:", reservation);
     });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
->>>>>>> 33d5c7490f6fc5c89e70d3a1dd10d8eb268ce924
   }
 };
