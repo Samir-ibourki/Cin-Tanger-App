@@ -3,16 +3,16 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/axios";
 export default function SelectSessionScreen() {
-  const { filmId, title } = useLocalSearchParams();
+  const { id, title } = useLocalSearchParams();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["sessions", filmId],
+    queryKey: ["sessions", id],
     queryFn: async () => {
-      const res = await api.get(`/sessions/film/${filmId}`);
+      const res = await api.get(`/session/film/${id}`);
       return res.data.data;
     },
   });
-
+  console.log(data)
   if (isLoading) {
     return <Text style={{ color: "#fff" }}>Loading sessions...</Text>;
   }
@@ -30,7 +30,7 @@ export default function SelectSessionScreen() {
             router.push({
               pathname: "/reservation/seats",
               params: {
-                filmId,
+                id,
                 sessionId: session.id,
                 time: session.time,
               },

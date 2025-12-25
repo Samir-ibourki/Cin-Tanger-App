@@ -11,8 +11,8 @@ export default function FilmDetailsScreen() {
 
   const handleReserve = () => {
     router.push({
-      pathname: `/reservation/${id}`,
-      params: { title },
+      pathname: `/reservation/reservescreen`,
+      params: { id, title },
     });
   };
 
