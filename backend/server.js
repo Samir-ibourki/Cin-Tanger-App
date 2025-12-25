@@ -6,7 +6,8 @@ app.use(express.json());
 import "./models/index.js";
 import filmRoutes from "./routes/filmRouters.js";
 import reservationRoutes from "./routes/reservationRouters.js";
-
+import salleRoutes from "./routes/salleRoutes.js";
+import sessionRoutes from "./routes/sessionRoutes.js";
 import cors from "cors";
 import { seedAll } from "./seeders/seedAll.js";
 
@@ -14,7 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use("/film", filmRoutes);
 app.use("/reservations", reservationRoutes);
-
+app.use("/salle", salleRoutes);
+app.use("/session", sessionRoutes);
 const startServer = async () => {
   try {
     await sequelize.sync({ force: true });

@@ -7,17 +7,13 @@ import {
   Text,
   StatusBar,
 } from "react-native";
-import { useQuery } from "@tanstack/react-query";
-import { getFilms } from "../src/services/filmservice";
 import FilmCard from "../src/components/filmCard";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFilms } from "../hooks/useFilms";
 
 export default function HomeScreen() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["films"],
-    queryFn: getFilms,
-    staleTime: 1000 * 60 * 5, // cache for 5 minutes
-  });
+  const { data, isLoading, error } = useFilms();
+  console.log("DATA", data);
 
   if (isLoading) {
     return (
