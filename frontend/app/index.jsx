@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   FlatList,
@@ -8,18 +7,14 @@ import {
   StatusBar,
   Pressable,
 } from "react-native";
-import { useQuery } from "@tanstack/react-query";
-import { router } from "expo-router"; 
-import { getFilms } from "../src/services/filmservice";
 import FilmCard from "../src/components/filmCard";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFilms } from "../hooks/useFilms";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["films"],
-    queryFn: getFilms,
-    staleTime: 1000 * 60 * 5,
-  });
+  const { data, isLoading, error } = useFilms();
+  console.log("DATA", data);
 
   if (isLoading) {
     return (
@@ -43,8 +38,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      
-    
+
       <Pressable
         style={styles.navButton}
         onPress={() => router.push("/reservation/session")}
