@@ -6,8 +6,6 @@ export const useFilms = () => {
     queryKey: ["films"],
     queryFn: async () => {
       const res = await api.get("/film");
-      console.log(res.data);
-
       return res.data;
     },
   });

@@ -5,16 +5,13 @@ import {
   ActivityIndicator,
   Text,
   StatusBar,
-  Pressable,
 } from "react-native";
 import FilmCard from "../src/components/filmCard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFilms } from "../hooks/useFilms";
-import { router } from "expo-router";
 
 export default function HomeScreen() {
   const { data, isLoading, error } = useFilms();
-  console.log("DATA", data);
 
   if (isLoading) {
     return (
@@ -28,9 +25,7 @@ export default function HomeScreen() {
   if (error) {
     return (
       <View style={styles.center}>
-        <Text style={styles.errorText}>
-          Could not load films. Please check your connection.
-        </Text>
+        <Text style={styles.errorText}>Could not load films.</Text>
       </View>
     );
   }
@@ -38,14 +33,6 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-
-      <Pressable
-        style={styles.navButton}
-        onPress={() => router.push("/reservation/session")}
-      >
-        <Text style={styles.navButtonText}>Go to Reservation</Text>
-      </Pressable>
-
       <Text style={styles.header}>Now Showing</Text>
       <FlatList
         data={data}
@@ -53,21 +40,7 @@ export default function HomeScreen() {
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}
         contentContainerStyle={{ paddingBottom: 16 }}
-        renderItem={({ item }) => (
-          <Pressable
-            onPress={() =>
-              router.push({
-                pathname: `/films/${item.id}`,
-                params: {
-                  title: item.title,
-                  posterUrl: item.posterUrl,
-                },
-              })
-            }
-          >
-            <FilmCard film={item} />
-          </Pressable>
-        )}
+        renderItem={({ item }) => <FilmCard film={item} />}
       />
     </SafeAreaView>
   );
