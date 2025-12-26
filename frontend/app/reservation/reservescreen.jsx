@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 
 export default function ReservationScreen() {
-  const { filmId, title } = useLocalSearchParams();
+  const { id, title } = useLocalSearchParams();
 
   return (
     <View style={styles.container}>
@@ -17,7 +17,7 @@ export default function ReservationScreen() {
         onPress={() =>
           router.push({
             pathname: "/reservation/session",
-            params: { filmId, title },
+            params: { id, title },
           })
         }
       >
