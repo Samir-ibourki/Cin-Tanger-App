@@ -83,51 +83,49 @@
 
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { useSessionsByFilm } from "../../hooks/useSessionsByFilm"; 
-// import api from "../../api/axios";
-
+import { useQuery } from "@tanstack/react-query";
+import api from "../../api/axios";
 export default function SelectSessionScreen() {
- 
   const { id, title } = useLocalSearchParams();
-  const { data, isLoading, isError } = useSessionsByFilm(filmId);
-  console.log("id film");
-console.log(filmId);
-  if (isLoading) return <Text style={styles.message}>Loading sessions...</Text>;
-  if (isError) return <Text style={[styles.message, { color: "red" }]}>Failed to load sessions</Text>;
-  if (data.length === 0) return <Text style={styles.message}>No sessions available</Text>;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["sessions", id],
+    queryFn: async () => {
+      const res = await api.get(`/session/film/${id}`);
+      return res.data.data;
+    },
+  });
+  console.log(data)
+  if (isLoading) {
+    return <Text style={{ color: "#fff" }}>Loading sessions...</Text>;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Select Session</Text>
       <Text style={styles.movie}>{title}</Text>
 
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item: session }) => (
-          <Pressable
-            style={styles.card}
-            onPress={() =>
-              router.push({
-                pathname: "/reservation/seats",
-                params: {
-                  filmId,
-                  sessionId: session.id,
-                  time: session.time,
-                },
-              })
-            }
-          >
-            <Text style={styles.time}>
-              {session.date} - {session.time}
-            </Text>
-            <Text style={styles.room}>
-              Salle: {session.Salle?.name} ({session.Salle?.capacity} places)
-            </Text>
-          </Pressable>
-        )}
-        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-      />
+      {data.map((session) => (
+        <Pressable
+          key={session.id}
+          style={styles.card}
+          onPress={() =>
+            router.push({
+              pathname: "/reservation/seats",
+              params: {
+                id,
+                sessionId: session.id,
+                time: session.time,
+              },
+            })
+          }
+        >
+          <Text style={styles.time}>
+            {session.date} - {session.time}
+          </Text>
+          <Text style={styles.room}>Salle {session.salleId}</Text>
+        </Pressable>
+      ))}
     </View>
   );
 }
