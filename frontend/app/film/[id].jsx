@@ -76,6 +76,7 @@ export default function FilmDetailsScreen() {
       <TouchableOpacity style={styles.button} onPress={handleReserve}>
         <Text style={styles.buttonText}>Reserve Ticket</Text>
       </TouchableOpacity>
+      
     </ScrollView>
   );
 }
