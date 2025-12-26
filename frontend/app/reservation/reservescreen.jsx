@@ -16,7 +16,7 @@ export default function ReservationScreen() {
         style={styles.button}
         onPress={() =>
           router.push({
-            pathname: "/reservation/session",
+            pathname: "/reservation/seats",
             params: { id, title },
           })
         }
