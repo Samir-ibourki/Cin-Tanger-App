@@ -9,11 +9,6 @@ Session.belongsTo(Film, { foreignKey: "filmId" });
 Salle.hasMany(Session, { foreignKey: "salleId", onDelete: "CASCADE" });
 Session.belongsTo(Salle, { foreignKey: "salleId" });
 
-// Session.hasMany(Reservation, { foreignKey: "sessionId", onDelete: "CASCADE" });
-// Reservation.belongsTo(Session, { foreignKey: "sessionId" });
-// Session.hasMany(Reservation, { foreignKey: "session_id", onDelete: "CASCADE" });
-// Reservation.belongsTo(Session, { foreignKey: "session_id" });
-
 Session.hasMany(Reservation, {
   foreignKey: "sessionId",
   as: "reservations",
