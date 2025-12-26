@@ -12,8 +12,9 @@ export default function FilmDetailsScreen() {
   const handleReserve = () => {
     router.push({
       pathname: `/reservation/${id}`,
+
       params: { title },
-    });
+    }); 
   };
 
   return (
@@ -31,6 +32,7 @@ export default function FilmDetailsScreen() {
       <TouchableOpacity style={styles.button} onPress={handleReserve}>
         <Text style={styles.buttonText}>Reserve Ticket</Text>
       </TouchableOpacity>
+      
     </ScrollView>
   );
 }
