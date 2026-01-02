@@ -18,6 +18,11 @@ app.use("/film", filmRoutes);
 app.use("/reservations", reservationRoutes);
 app.use("/salle", salleRoutes);
 app.use("/sessions", sessionRoutes);
+
+// Health check and root route
+app.get("/", (req, res) => res.send("CinéTanger API is running!"));
+app.get("/health", (req, res) => res.status(200).json({ status: "ok" }));
+
 const startServer = async () => {
   app.listen(PORT, async () => {
     console.log(`Server running on http://localhost:${PORT}`);
