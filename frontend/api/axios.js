@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const isProduction = true; // Bedela l false bach t-khdem B local f pc dyalk
+const isProduction = false; // Redtha false bach t-khdem B local f pc dyalk o it-l3ou l-films f tillifoun
 
 const API_url = isProduction
   ? "https://cin-tanger-app-production.up.railway.app"
