@@ -19,16 +19,17 @@ app.use("/reservations", reservationRoutes);
 app.use("/salle", salleRoutes);
 app.use("/sessions", sessionRoutes);
 const startServer = async () => {
-  try {
-    await sequelize.sync({ alter: true });
-    await seedAll();
-
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error("Server error:", error);
-  }
-;}
+  app.listen(PORT, async () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    
+    try {
+      await sequelize.sync({ alter: true });
+      await seedAll();
+      console.log("Database synced and seeded!");
+    } catch (error) {
+      console.error("Database initialization error:", error);
+    }
+  });
+};
 
 startServer();
