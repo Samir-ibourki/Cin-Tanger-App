@@ -1,13 +1,12 @@
-import axios from "axios";
+import api from "../../api/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = "http://192.168.1.188:3000";
 const STORAGE_KEY = "films_cache";
 
 export const getFilms = async () => {
   try {
   
-    const response = await axios.get(`${API_URL}/films`);
+    const response = await api.get(`/film`);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(response.data));
     return response.data;
   // eslint-disable-next-line no-unused-vars

@@ -17,7 +17,7 @@ app.use(express.json());
 app.use("/film", filmRoutes);
 app.use("/reservations", reservationRoutes);
 app.use("/salle", salleRoutes);
-app.use("/session", sessionRoutes);
+app.use("/sessions", sessionRoutes);
 const startServer = async () => {
   try {
     await sequelize.sync({ alter: true });
