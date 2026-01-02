@@ -14,6 +14,8 @@ export default function Layout() {
         <Stack.Screen name="reservation/session" />
         <Stack.Screen name="film/[id]" />
       </Stack>
+
+
     </QueryClientProvider>
   );
 }

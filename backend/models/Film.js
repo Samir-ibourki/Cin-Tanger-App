@@ -11,6 +11,7 @@ const Film = sequelize.define(
     description: {
       type: DataTypes.TEXT,
       allowNull: false,
+      defaultValue: "No description provided"
     },
     duration: {
       type: DataTypes.INTEGER,
