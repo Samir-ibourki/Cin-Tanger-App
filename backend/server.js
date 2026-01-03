@@ -1,6 +1,6 @@
 import sequelize from "./config/database.js";
 import express from "express";
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 import "./models/index.js";
@@ -17,18 +17,24 @@ app.use(express.json());
 app.use("/film", filmRoutes);
 app.use("/reservations", reservationRoutes);
 app.use("/salle", salleRoutes);
-app.use("/session", sessionRoutes);
-const startServer = async () => {
-  try {
-    await sequelize.sync({ alter: true });
-    await seedAll();
+app.use("/sessions", sessionRoutes);
 
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error("Server error:", error);
-  }
-;}
+// Health check and root route
+app.get("/", (req, res) => res.send("CinéTanger API is running!"));
+app.get("/health", (req, res) => res.status(200).json({ status: "ok" }));
+
+const startServer = async () => {
+  app.listen(PORT, async () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    
+    try {
+      await sequelize.sync({ alter: true });
+      await seedAll();
+      console.log("Database synced and seeded!");
+    } catch (error) {
+      console.error("Database initialization error:", error);
+    }
+  });
+};
 
 startServer();

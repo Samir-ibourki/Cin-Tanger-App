@@ -45,7 +45,7 @@ services:
       PORT: 3000
 
       DB_HOST: postgres # internal Docker communication
-      DB_PORT: 54321
+      DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: cinetanger_db
