@@ -1,7 +1,8 @@
 import { Text, StyleSheet, Pressable, View, Dimensions } from "react-native";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import { Clock, Star, Sparkles } from "lucide-react-native";
+import { Clock, Star, Sparkles, ChevronRight } from "lucide-react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
@@ -32,79 +33,79 @@ export default function FilmCard({ film }) {
           contentFit="cover"
           transition={300}
         />
-        
+
         {/* Premium Badge */}
         <View style={styles.premiumBadge}>
-          <Sparkles color="#FFD700" size={16} strokeWidth={2} />
+          <Sparkles color="#FFD700" size={14} strokeWidth={2} />
         </View>
 
         {/* Rating Badge */}
         <View style={styles.ratingBadge}>
-          <Star color="#FFD700" size={12} fill="#FFD700" strokeWidth={2} />
-          <Text style={styles.ratingText}>{film.rating || "N/A"}</Text>
+          <Star color="#FFD700" size={10} fill="#FFD700" strokeWidth={2} />
+          <Text style={styles.ratingText}>{film.rating || "8.5"}</Text>
         </View>
 
         {/* Gradient Overlay */}
-        <View style={styles.gradientOverlay} />
+        <LinearGradient
+          colors={["transparent", "rgba(0,0,0,0.8)", "#161616"]}
+          style={styles.gradientOverlay}
+        />
       </View>
 
       {/* Film Info */}
       <View style={styles.infoContainer}>
-        <Text style={styles.title} numberOfLines={2}>
+        <Text style={styles.title} numberOfLines={1}>
           {film.title}
         </Text>
-        
-        {/* Genre & Duration */}
+
         <View style={styles.metaContainer}>
-          {film.genre && (
-            <Text style={styles.genre} numberOfLines={1}>
-              {film.genre}
-            </Text>
-          )}
-          {film.duration && (
-            <View style={styles.durationContainer}>
-              <Clock color="#666666" size={12} strokeWidth={2} />
-              <Text style={styles.duration}>{film.duration} min</Text>
-            </View>
-          )}
+          <Text style={styles.genre}>
+            {film.genre || "Action"}
+          </Text>
+          <View style={styles.dot} />
+          <Text style={styles.duration}>
+            {film.duration || "120"} min
+          </Text>
         </View>
 
-        {/* Showtimes indicator */}
-        {film.showtime_count && film.showtime_count > 0 && (
-          <Text style={styles.showtimes}>
-            {film.showtime_count} séance{film.showtime_count > 1 ? 's' : ''}
-          </Text>
-        )}
+        <TouchableOpacity
+          style={styles.bookTag}
+          onPress={() => router.push({ pathname: "/film/[id]", params: { id: film.id } })}
+        >
+          <Text style={styles.bookTagText}>Réserver</Text>
+          <ChevronRight color="#E50914" size={12} strokeWidth={3} />
+        </TouchableOpacity>
       </View>
     </Pressable>
   );
 }
 
+// Re-importing TouchableOpacity
+import { TouchableOpacity } from "react-native";
+
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
-    backgroundColor: "#1a1a1a",
-    borderRadius: 12,
+    backgroundColor: "#161616",
+    borderRadius: 20,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "#2a2a2a",
+    borderColor: "rgba(255, 255, 255, 0.05)",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowRadius: 15,
+    elevation: 8,
   },
   cardPressed: {
-    opacity: 0.85,
-    transform: [{ scale: 0.98 }],
+    opacity: 0.9,
+    transform: [{ scale: 0.97 }],
   },
-
-  // Poster Styles
   posterContainer: {
     position: "relative",
     width: "100%",
-    height: CARD_WIDTH * 1.4,
-    backgroundColor: "#0a0a0a",
+    height: CARD_WIDTH * 1.45,
+    backgroundColor: "#000",
   },
   poster: {
     width: "100%",
@@ -115,81 +116,82 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: "30%",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    height: "50%",
   },
-
-  // Badges
   premiumBadge: {
     position: "absolute",
-    top: 8,
-    right: 8,
-    backgroundColor: "rgba(0, 0, 0, 0.75)",
-    borderRadius: 20,
+    top: 10,
+    right: 10,
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    borderRadius: 10,
     padding: 6,
     borderWidth: 1,
-    borderColor: "#FFD700",
+    borderColor: "rgba(255, 215, 0, 0.3)",
   },
   ratingBadge: {
     position: "absolute",
-    top: 8,
-    left: 8,
-    backgroundColor: "rgba(0, 0, 0, 0.85)",
-    borderRadius: 16,
+    top: 10,
+    left: 10,
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    borderRadius: 10,
     paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingVertical: 5,
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
     borderWidth: 1,
-    borderColor: "#FFD700",
+    borderColor: "rgba(255, 255, 255, 0.1)",
   },
   ratingText: {
     color: "#FFFFFF",
-    fontSize: 12,
-    fontWeight: "700",
+    fontSize: 11,
+    fontWeight: "800",
   },
-
-  // Info Container
   infoContainer: {
     padding: 12,
   },
   title: {
     color: "#FFFFFF",
-    fontSize: 15,
-    fontWeight: "700",
-    marginBottom: 8,
-    lineHeight: 19,
+    fontSize: 16,
+    fontWeight: "800",
+    marginBottom: 4,
   },
-
-  // Meta Info
   metaContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 6,
+    marginBottom: 10,
   },
   genre: {
-    color: "#E50914",
+    color: "#999999",
     fontSize: 12,
     fontWeight: "600",
-    flex: 1,
-    marginRight: 8,
   },
-  durationContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
+  dot: {
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: "#E50914",
+    marginHorizontal: 6,
   },
   duration: {
-    color: "#666666",
-    fontSize: 11,
-    fontWeight: "500",
-  },
-  showtimes: {
     color: "#999999",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  bookTag: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(229, 9, 20, 0.1)",
+    alignSelf: "flex-start",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    gap: 4,
+  },
+  bookTagText: {
+    color: "#E50914",
     fontSize: 11,
-    fontWeight: "500",
-    fontStyle: "italic",
+    fontWeight: "800",
+    textTransform: "uppercase",
   },
 });

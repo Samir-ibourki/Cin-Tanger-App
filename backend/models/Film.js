@@ -30,6 +30,11 @@ const Film = sequelize.define(
       allowNull: false,
       defaultValue: 0,
     },
+    genre: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: "Action",
+    },
   },
   { timestamps: true }
 );

@@ -9,7 +9,23 @@ import {
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /salle:
+ *   get:
+ *     summary: Get all salles
+ *     tags: [Salles]
+ */
+
 router.get("/", getAllSalles);
+
+/**
+ * @swagger
+ * /salle:
+ *   post:
+ *     summary: Create salle
+ *     tags: [Salles]
+ */
 
 router.post("/", createSalle);
 

@@ -1,9 +1,22 @@
 import React from "react";
-import { Text, StyleSheet, ScrollView, TouchableOpacity, View, ActivityIndicator } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+  Dimensions,
+  StatusBar,
+} from "react-native";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/axios";
+import { LinearGradient } from "expo-linear-gradient";
+import { ArrowLeft, Clock, Star, Play, Calendar } from "lucide-react-native";
+
+const { width, height } = Dimensions.get("window");
 
 export default function FilmDetailsScreen() {
   const router = useRouter();
@@ -22,7 +35,7 @@ export default function FilmDetailsScreen() {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color="#E50914" />
-        <Text style={styles.loadingText}>Loading film details...</Text>
+        <Text style={styles.loadingText}>Chargement du film...</Text>
       </View>
     );
   }
@@ -30,17 +43,20 @@ export default function FilmDetailsScreen() {
   if (error || !film) {
     return (
       <View style={styles.center}>
-        <Text style={styles.errorText}>Could not load film details.</Text>
+        <Text style={styles.errorText}>Impossible de charger les détails.</Text>
+        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+          <Text style={styles.backBtnText}>Retour</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 
-  const { title, posterUrl, description, duration, rating } = film;
+  const { title, posterUrl, description, duration, rating, genre } = film;
 
   const handleReserve = () => {
     router.push({
       pathname: "/reservation/seats",
-      params: { 
+      params: {
         filmId: id,
         title,
       },
@@ -48,113 +64,284 @@ export default function FilmDetailsScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Image
-        source={{ uri: posterUrl }}
-        style={styles.poster}
-        contentFit="cover"
-      />
-      <Text style={styles.title}>{title}</Text>
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
 
-      {/* Film Info */}
-      <View style={styles.infoRow}>
-        {duration && (
-          <View style={styles.infoBadge}>
-            <Text style={styles.infoText}>🕐 {duration} min</Text>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Poster Header */}
+        <View style={styles.posterContainer}>
+          <Image
+            source={{ uri: posterUrl }}
+            style={styles.poster}
+            contentFit="cover"
+          />
+          <LinearGradient
+            colors={["transparent", "rgba(10, 10, 10, 0.8)", "#0A0A0A"]}
+            style={styles.gradient}
+          />
+
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="#FFFFFF" size={24} strokeWidth={2.5} />
+          </TouchableOpacity>
+
+          <View style={styles.posterContent}>
+            <View style={styles.genreBadge}>
+              <Text style={styles.genreText}>{genre || "Action"}</Text>
+            </View>
+            <Text style={styles.title}>{title}</Text>
+
+            <View style={styles.metaRow}>
+              <View style={styles.metaItem}>
+                <Clock color="#E50914" size={16} strokeWidth={2.5} />
+                <Text style={styles.metaText}>{duration} min</Text>
+              </View>
+              <View style={styles.metaDivider} />
+              <View style={styles.metaItem}>
+                <Star color="#FFD700" size={16} fill="#FFD700" />
+                <Text style={styles.metaText}>{rating}/10</Text>
+              </View>
+              <View style={styles.metaDivider} />
+              <View style={styles.metaItem}>
+                <Calendar color="#E50914" size={16} strokeWidth={2.5} />
+                <Text style={styles.metaText}>2024</Text>
+              </View>
+            </View>
           </View>
-        )}
-        {rating && (
-          <View style={styles.infoBadge}>
-            <Text style={styles.infoText}>⭐ {rating}/10</Text>
+        </View>
+
+        {/* Content Section */}
+        <View style={styles.detailsContainer}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIndicator} />
+            <Text style={styles.sectionTitle}>Synopsis</Text>
           </View>
-        )}
+          <Text style={styles.description}>
+            {description || "Aucun synopsis disponible pour ce film."}
+          </Text>
+
+          <View style={styles.castContainer}>
+            <Text style={styles.sectionTitleSmall}>Réalisation</Text>
+            <Text style={styles.castText}>Tanger Cinema Production</Text>
+          </View>
+        </View>
+
+        <View style={{ height: 120 }} />
+      </ScrollView>
+
+      {/* Floating Action Button */}
+      <View style={styles.footer}>
+        <LinearGradient
+          colors={["transparent", "rgba(10, 10, 10, 0.9)", "#0A0A0A"]}
+          style={styles.footerGradient}
+        />
+        <TouchableOpacity style={styles.reserveButton} onPress={handleReserve}>
+          <Play color="#FFFFFF" size={20} fill="#FFFFFF" />
+          <Text style={styles.reserveButtonText}>Réserver ma place</Text>
+        </TouchableOpacity>
       </View>
-
-      <Text style={styles.section}>Synopsis</Text>
-      <Text style={styles.text}>{description || "No description available."}</Text>
-
-      <TouchableOpacity style={styles.button} onPress={handleReserve}>
-        <Text style={styles.buttonText}>Reserve Ticket</Text>
-      </TouchableOpacity>
-      
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#141414",
+    backgroundColor: "#0A0A0A",
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   center: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#141414",
+    backgroundColor: "#0A0A0A",
   },
   loadingText: {
-    color: "#fff",
-    marginTop: 12,
+    color: "#FFFFFF",
+    marginTop: 16,
     fontSize: 16,
+    fontWeight: "600",
   },
   errorText: {
-    color: "#fff",
+    color: "#FFFFFF",
     fontSize: 16,
     textAlign: "center",
-    paddingHorizontal: 20,
+  },
+  posterContainer: {
+    width: width,
+    height: height * 0.6,
+    position: "relative",
   },
   poster: {
     width: "100%",
-    height: 400,
+    height: "100%",
   },
-  title: {
-    color: "#E50914",
-    fontSize: 26,
-    fontWeight: "bold",
-    margin: 16,
-    textAlign: "center",
+  gradient: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: "70%",
   },
-  infoRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 16,
-    marginBottom: 8,
+  backButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    padding: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
-  infoBadge: {
-    backgroundColor: "#2a2a2a",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-  },
-  infoText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  section: {
-    color: "#aaa",
-    fontSize: 16,
-    marginHorizontal: 16,
-    marginTop: 16,
-    fontWeight: "600",
-  },
-  text: {
-    color: "#ddd",
-    fontSize: 14,
-    marginHorizontal: 16,
-    marginTop: 8,
-    lineHeight: 22,
-  },
-  button: {
-    margin: 24,
-    paddingVertical: 14,
-    backgroundColor: "#E50914",
-    borderRadius: 8,
+  posterContent: {
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 20,
     alignItems: "center",
   },
-  buttonText: {
-    color: "#fff",
+  genreBadge: {
+    backgroundColor: "rgba(229, 9, 20, 0.2)",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "rgba(229, 9, 20, 0.4)",
+    marginBottom: 12,
+  },
+  genreText: {
+    color: "#E50914",
+    fontSize: 12,
     fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+  },
+  title: {
+    color: "#FFFFFF",
+    fontSize: 32,
+    fontWeight: "900",
+    textAlign: "center",
+    marginBottom: 16,
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 10,
+  },
+  metaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  metaItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  metaText: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  metaDivider: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+  },
+  detailsContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 12,
+  },
+  sectionIndicator: {
+    width: 4,
+    height: 20,
+    backgroundColor: "#E50914",
+    borderRadius: 2,
+  },
+  sectionTitle: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  description: {
+    color: "#CCCCCC",
     fontSize: 16,
+    lineHeight: 26,
+    fontWeight: "400",
+  },
+  sectionTitleSmall: {
+    color: "#999999",
+    fontSize: 14,
+    fontWeight: "700",
+    marginTop: 24,
+    marginBottom: 4,
+    textTransform: "uppercase",
+  },
+  castText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  footer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+    paddingTop: 20,
+  },
+  footerGradient: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    top: 0,
+  },
+  reserveButton: {
+    backgroundColor: "#E50914",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    paddingVertical: 18,
+    borderRadius: 16,
+    shadowColor: "#E50914",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 15,
+    elevation: 10,
+  },
+  reserveButtonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "800",
+  },
+  backBtn: {
+    marginTop: 20,
+    padding: 12,
+    backgroundColor: "#E50914",
+    borderRadius: 8,
+  },
+  backBtnText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
