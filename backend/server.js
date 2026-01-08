@@ -11,13 +11,25 @@ import salleRoutes from "./routes/salleRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import cors from "cors";
 import { seedAll } from "./seeders/seedAll.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger/swagger.js";
+// Swagger API documentation route
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 app.use("/film", filmRoutes);
 app.use("/reservations", reservationRoutes);
 app.use("/salle", salleRoutes);
 app.use("/sessions", sessionRoutes);
+
+// Swagger API documentation route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health check and root route
 app.get("/", (req, res) => res.send("CinéTanger API is running!"));
